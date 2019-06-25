@@ -26,6 +26,38 @@ server.get('/test/:id', (req, res) => {
     return res.json({ message: `Searching test ${id}`})
 })
 
+
+//globlal log  middleware
+server.use((req, res, next) => {
+    console.time('Request')
+    console.log(`Method: ${req.method}; URL: ${req.url}`)
+
+    next()
+
+    console.timeEnd('Request')
+})
+
+// local middleware user have a name in body
+function checkUserExists(req, res, next) {
+    if (!req.body.name) {
+        return res.status(400).json({ error: "User name not found on request body!"})
+    }
+
+    return next()
+}
+
+// local middleware check user in array
+function checkUserInArray(req, res, next) {
+    const  user = users[req.params.index]
+    if (!user) {
+        return res.status(400).json({ error: "User does not exist!"})
+    }
+
+    req.user = user
+
+    return next()
+}
+
 // const test to store the users
 const users = ['David', 'Diego', 'Julio'] 
 
@@ -40,17 +72,18 @@ server.get('/users', (req, res) => {
 /**
  * params route
  * get the users by index 
+ * use local middleware checkUserInArray 
  */
-server.get('/users/:index', (req,res) => {
-    const { index } = req.params
-    return res.json(users[ index ])
+server.get('/users/:index', checkUserInArray, (req,res) => {
+    return res.json(req.user)
 })
 
 /**
  * post route
  * store new users
+ * use local middleware
  */
-server.post('/users', (req, res) => {
+server.post('/users', checkUserExists, (req, res) => {
     const { name } = req.body
     users.push(name)
 
@@ -61,8 +94,10 @@ server.post('/users', (req, res) => {
  * put route
  * update user by index param
  * change the name in the body
+ * use local middleware checkUserInArray
+ * use local middleware checkUserExists
  */
-server.put('/users/:index', (req, res) => {
+server.put('/users/:index', checkUserInArray, checkUserExists, (req, res) => {
     const { index } = req.params
     const { name } = req.body
 
@@ -74,8 +109,9 @@ server.put('/users/:index', (req, res) => {
 /**
  * delete route
  * get user by index
+ * use local middleware checkUserInArray
  */
-server.delete('/users/:index', (req, res) => {
+server.delete('/users/:index', checkUserInArray, (req, res) => {
     const { index } = req.params
     users.splice(index, 1)
 
