@@ -1,8 +1,8 @@
 {
-  "name": "Rocketseat-Omnistack-BootCamp-Node.js-Module-01",
+  "name": "Rocketseat-Gostack-Bootcamp-Node.js-Module-01",
   "version": "1.0.0",
   "main": "index.js",
-  "repository": "https://github.com/DavidStinghen/Rocketseat-Omnistack-BootCamp-Node.js-Module-01.git",
+  "repository": "https://github.com/DavidStinghen/Rocketseat-Gostack-Bootcamp-Node.js-Module-01.git",
   "author": "DavidNatanael <davidstinghen@gmail.com>",
   "license": "MIT",
   "scripts": {
