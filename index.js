@@ -23,5 +23,16 @@ server.get('/test/:id', (req, res) => {
     return res.json({ message: `Searching test ${id}`})
 })
 
+// const test to store the users
+const users = ['David', 'Diego', 'Julio'] 
+
+/**
+ * params route
+ */
+server.get('/users/:index', (req,res) => {
+    const { index } = req.params
+    return res.json(users[ index ])
+})
+
 // server listen port 3000
 server.listen(3000)
